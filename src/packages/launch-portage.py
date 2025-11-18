@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
+# portage.py
 
-import os
-import sys
 import cmd
 import subprocess
 import shlex
@@ -18,11 +16,11 @@ class packageCLI(cmd.Cmd):
     CMD_MANUAL = "man emerge"
     CMD_SEARCH = "emerge --search"
     CMD_INFO = "emerge --info"
-    CMD_INSTALL = "emerge"
-    CMD_REMOVE = "emerge --unmerge"
-    CMD_UPDATE = "emerge --update"
+    CMD_INSTALL = "emerge --ask"
+    CMD_REMOVE = "emerge --ask --unmerge"
+    CMD_UPDATE = "emerge --ask --update"
     CMD_CLEAN = "emerge --clean"
-    CMD_DEPS_CLEAN = "emerge  --depclean"
+    CMD_DEPS_CLEAN = "emerge --ask --depclean"
     CMD_MAKE_CONFIG = "$EDITOR /etc/portage/make.conf"
     CMD_SYNC_DEPS = "emerge --sync"
 
@@ -87,6 +85,8 @@ class packageCLI(cmd.Cmd):
         try:
             options_line = input
             parts = package_name.split()
+        except EOFError:
+            print("\nCancelled by user. Returning...")
         package_name = parts[0]
         full_command = f"{self.CMD_INSTALL} {package_name}"
         self.execute_system_command(full_command)
@@ -113,14 +113,3 @@ class packageCLI(cmd.Cmd):
             print("If Portage is not working correctly, you may check the wiki on how to troubleshoot")
             print("(https://wiki.gentoo.org/wiki/Portage/Help) or how to restore broken Portage")
             print("(https://wiki.gentoo.org/wiki/Project:Portage/Fixing_broken_portage)\n")
-
-# Shell environment
-
-if __name__ == '__main__':
-    if os.geteuid() != 0:
-        print("\nPermission denied. Rerun this command with root privilege.\n")
-        sys.exit(1)
-    try:
-        packageCLI().cmdloop()
-    except KeyboardInterrupt:
-        print("\n\nExiting...")
