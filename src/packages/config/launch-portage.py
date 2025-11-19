@@ -5,7 +5,7 @@ import subprocess
 import shlex
 
 # TODO: Write the comments and docs cause I won't be remembering this afterwards.
-class packageCLI(cmd.Cmd):
+class portagePkg:
 
     # Set package manager name
     PKG_MGR_NAME = "emerge"
@@ -21,7 +21,6 @@ class packageCLI(cmd.Cmd):
     CMD_UPDATE = "emerge --ask --update"
     CMD_CLEAN = "emerge --clean"
     CMD_DEPS_CLEAN = "emerge --ask --depclean"
-    CMD_MAKE_CONFIG = "$EDITOR /etc/portage/make.conf"
     CMD_SYNC_DEPS = "emerge --sync"
 
     # Shell environment setup
